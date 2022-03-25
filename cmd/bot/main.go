@@ -7,4 +7,6 @@ import (
 func main() {
 	bot.Init()
 	bot.Listen()
+	bot.Reply()
+	
 }

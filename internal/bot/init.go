@@ -11,19 +11,28 @@ import (
 )
 
 func Init() {
+	parasInit()
 	socketInit()
+	databaseInit()
+}
+
+func parasInit() {
+	messageRecvCh = make(chan []byte, CH_MAX_BUFSIZE)
+	eventRecvCh = make(chan []byte, CH_MAX_BUFSIZE)
+	messageSendCh = make(chan []byte, CH_MAX_BUFSIZE)
+	eventSendCh = make(chan []byte, CH_MAX_BUFSIZE)
 }
 
 func socketInit() {
 
 	header := http.Header{
-		"verifyKey": {"1234567890"},
-		"qq":        {"2473537565"},
+		"verifyKey": {VERIFY_KEY},
+		"qq":        {QQ_NUMBER},
 	}
 
 	um := url.URL{
 		Scheme: "ws",
-		Host:   "localhost:8080",
+		Host:   HOST,
 		Path:   "/message",
 	}
 
@@ -37,7 +46,7 @@ func socketInit() {
 
 	ue := url.URL{
 		Scheme: "ws",
-		Host:   "localhost:8080",
+		Host:   HOST,
 		Path:   "/event",
 	}
 
@@ -48,5 +57,5 @@ func socketInit() {
 }
 
 func databaseInit() {
-	
+
 }
