@@ -11,7 +11,7 @@ func StartListen() {
 		if err != nil {
 			log.Printf("read: %s", err)
 		}
-		messageRecvCh <- message
+		MessageRecvCh <- message
 	}()
 
 	go func() {
@@ -19,6 +19,6 @@ func StartListen() {
 		if err != nil {
 			log.Printf("read: %s", err)
 		}
-		eventRecvCh <- event
+		EventRecvCh <- event
 	}()
 }

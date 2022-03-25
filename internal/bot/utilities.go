@@ -6,8 +6,8 @@ var HOST = "localhost:8080"
 
 var CH_MAX_BUFSIZE = 10
 
-var messageRecvCh chan []byte
-var eventRecvCh chan []byte
+var MessageRecvCh chan []byte
+var EventRecvCh chan []byte
 
-var messageSendCh chan []byte
-var eventSendCh chan []byte
+var MessageSendCh chan []byte
+var EventSendCh chan []byte
