@@ -1,0 +1,9 @@
+package main
+
+import(
+	"pixie/internal/bot"
+)
+
+func main() {
+	bot.Init()
+}

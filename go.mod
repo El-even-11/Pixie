@@ -1,3 +1,3 @@
-module bot
+module pixie
 
 go 1.18
