@@ -1,4 +1,4 @@
-## Pixie
+# Pixie
 
 A loevly chatting bot for personal use.
 
