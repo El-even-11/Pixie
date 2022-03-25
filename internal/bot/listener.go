@@ -5,7 +5,7 @@ import (
 	"pixie/internal/pkg/net"
 )
 
-func Listen() {
+func StartListen() {
 	go func() {
 		_, message, err := net.MessageConn.ReadMessage()
 		if err != nil {

@@ -6,7 +6,7 @@ import (
 
 func main() {
 	bot.Init()
-	bot.Listen()
-	bot.Reply()
-	
+	bot.StartListen()
+	bot.StartReply()
+	bot.Serve()
 }
