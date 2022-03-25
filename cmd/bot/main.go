@@ -1,9 +1,10 @@
 package main
 
-import(
+import (
 	"pixie/internal/bot"
 )
 
 func main() {
 	bot.Init()
+	bot.Listen()
 }

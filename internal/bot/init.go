@@ -6,6 +6,8 @@ import (
 	"net/url"
 
 	"github.com/gorilla/websocket"
+
+	"pixie/internal/pkg/net"
 )
 
 func Init() {
@@ -13,32 +15,38 @@ func Init() {
 }
 
 func socketInit() {
-	u := url.URL{
-		Scheme: "ws",
-		Host:   "localhost:8080",
-		Path:   "/message",
-	}
 
 	header := http.Header{
 		"verifyKey": {"1234567890"},
 		"qq":        {"2473537565"},
 	}
 
-	log.Printf("connecting to %s", u.String())
-	c, _, err := websocket.DefaultDialer.Dial(u.String(), header)
+	um := url.URL{
+		Scheme: "ws",
+		Host:   "localhost:8080",
+		Path:   "/message",
+	}
+
+	log.Printf("connecting to %s", um.String())
+
+	var err error
+	net.MessageConn, _, err = websocket.DefaultDialer.Dial(um.String(), header)
 	if err != nil {
 		log.Fatal("dial:", err)
 	}
 
-	for {
-		_, message, err := c.ReadMessage()
-		if err != nil {
-			log.Fatal("read:", err)
-		}
-		log.Printf("recv: %s", message)
+	ue := url.URL{
+		Scheme: "ws",
+		Host:   "localhost:8080",
+		Path:   "/event",
+	}
+
+	net.EventConn, _, err = websocket.DefaultDialer.Dial(ue.String(), header)
+	if err != nil {
+		log.Fatal("dial:", err)
 	}
 }
 
 func databaseInit() {
-
+	
 }
