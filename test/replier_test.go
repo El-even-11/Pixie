@@ -4,6 +4,7 @@ import (
 	"log"
 	"pixie/internal/bot"
 	"testing"
+	"time"
 )
 
 var data = [5]string{
@@ -98,4 +99,6 @@ func TestListenAndReply(t *testing.T) {
 		bot.MessageSendCh <- m
 		<-m.Done
 	}
+
+	time.Sleep(time.Second * 1)
 }
