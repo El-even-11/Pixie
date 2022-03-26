@@ -4,9 +4,13 @@ import (
 	"log"
 	"pixie/internal/pkg/debug"
 	"pixie/internal/pkg/net"
+	"time"
 
 	"github.com/gorilla/websocket"
 )
+
+// pause between messages to prevent packet loss
+const INTERVAL = time.Millisecond * 500
 
 func StartReply() {
 	go func() {
@@ -33,6 +37,7 @@ func StartReply() {
 					log.Printf("write fail: %s", err)
 				}
 			}
+			time.Sleep(INTERVAL)
 		}
 	}()
 }
