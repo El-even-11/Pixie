@@ -12,19 +12,23 @@ func StartReply() {
 	go func() {
 		for {
 			select {
-			case data := <-MessageSendCh:
+			case message := <-MessageSendCh:
 
-				debug.DPrinf("Write: %s", data)
+				debug.DPrinf("Write: %s", message.Data)
 
-				err := net.MessageConn.WriteMessage(websocket.TextMessage, data)
+				err := net.MessageConn.WriteMessage(websocket.TextMessage, message.Data)
+				message.Done <- struct{}{}
+
 				if err != nil {
 					log.Printf("write fail: %s", err)
 				}
-			case data := <-EventSendCh:
+			case event := <-EventSendCh:
 
-				debug.DPrinf("Write: %s", data)
+				debug.DPrinf("Write: %s", event.Data)
 
-				err := net.EventConn.WriteMessage(websocket.TextMessage, data)
+				err := net.EventConn.WriteMessage(websocket.TextMessage, event.Data)
+				event.Done <- struct{}{}
+
 				if err != nil {
 					log.Printf("write fail: %s", err)
 				}

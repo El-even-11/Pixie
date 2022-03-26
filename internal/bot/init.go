@@ -19,8 +19,8 @@ func Init() {
 func parasInit() {
 	MessageRecvCh = make(chan []byte, CH_MAX_BUFSIZE)
 	EventRecvCh = make(chan []byte, CH_MAX_BUFSIZE)
-	MessageSendCh = make(chan []byte, CH_MAX_BUFSIZE)
-	EventSendCh = make(chan []byte, CH_MAX_BUFSIZE)
+	MessageSendCh = make(chan Message, CH_MAX_BUFSIZE)
+	EventSendCh = make(chan Event, CH_MAX_BUFSIZE)
 }
 
 func socketInit() {

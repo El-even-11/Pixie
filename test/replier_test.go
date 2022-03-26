@@ -4,7 +4,6 @@ import (
 	"log"
 	"pixie/internal/bot"
 	"testing"
-	"time"
 )
 
 func TestStartReply(t *testing.T) {
@@ -15,12 +14,12 @@ func TestStartReply(t *testing.T) {
 	var data = [5]string{
 		`
 			{
-				"syncId":1,
+				"syncId":134214,
 				"command":"sendGroupMessage",
 				"content":{
 					"target":317109237,
 					"messageChain":[
-						{"type":"Plain","text":"hello1!"}
+						{"type":"Plain","text":"test111"}
 					]
 				}
 			}
@@ -76,10 +75,11 @@ func TestStartReply(t *testing.T) {
 	}
 
 	for i := 0; i < 1; i++ {
-		bot.MessageSendCh <- []byte(data[i])
-	}
-
-	for {
-		time.Sleep(1000)
+		m := bot.Message{
+			Data: []byte(data[i]),
+			Done: make(chan struct{}),
+		}
+		bot.MessageSendCh <- m
+		<-m.Done
 	}
 }
