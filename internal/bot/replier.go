@@ -18,7 +18,7 @@ func StartReply() {
 			select {
 			case message := <-MessageSendCh:
 
-				debug.DPrinf("Write: %s", message.Data)
+				debug.DPrintf("Write: %s", message.Data)
 
 				err := net.MessageConn.WriteMessage(websocket.TextMessage, message.Data)
 				message.Done <- struct{}{}
@@ -28,7 +28,7 @@ func StartReply() {
 				}
 			case event := <-EventSendCh:
 
-				debug.DPrinf("Write: %s", event.Data)
+				debug.DPrintf("Write: %s", event.Data)
 
 				err := net.EventConn.WriteMessage(websocket.TextMessage, event.Data)
 				event.Done <- struct{}{}
