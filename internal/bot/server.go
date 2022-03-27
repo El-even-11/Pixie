@@ -37,6 +37,10 @@ func serveMessage(data []byte) Message {
 		log.Printf("%s", err)
 	}
 	debug.DPrintf("decode: %v", messageChain)
+
+
+	
+
 	return Message{
 		Empty: true,
 	}
@@ -49,6 +53,8 @@ func serveEvent(data []byte) Event {
 	}
 
 	debug.DPrintf("decode: %v", event)
+
+
 	return Event{
 		Empty: true,
 	}
