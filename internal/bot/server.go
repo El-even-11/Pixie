@@ -1,6 +1,8 @@
 package bot
 
 import (
+	"log"
+	"pixie/internal/pkg/debug"
 	"pixie/internal/pkg/json"
 )
 
@@ -30,14 +32,23 @@ func Serve() {
 }
 
 func serveMessage(data []byte) Message {
-	json.Decode(data, true)
+	messageChain, err := json.Decode(data, true)
+	if err != nil {
+		log.Printf("%s", err)
+	}
+	debug.DPrintf("decode: %v", messageChain)
 	return Message{
 		Empty: true,
 	}
 }
 
 func serveEvent(data []byte) Event {
-	json.Decode(data, false)
+	event, err := json.Decode(data, false)
+	if err != nil {
+		log.Printf("%s", err)
+	}
+
+	debug.DPrintf("decode: %v", event)
 	return Event{
 		Empty: true,
 	}

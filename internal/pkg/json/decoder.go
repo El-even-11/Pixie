@@ -29,7 +29,7 @@ func decodeMessage(data []byte) (MessageChain, error) {
 		log.Printf("json: unmarshaling failed: %s", err)
 		return messageChain, err
 	}
-
+	
 	return messageChain, nil
 }
 
