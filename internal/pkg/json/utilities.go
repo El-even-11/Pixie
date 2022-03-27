@@ -21,23 +21,14 @@ const (
 type EventType int
 
 const (
-	BotOnlineEvent                  EventType = 1
-	BotOfflineEventActive           EventType = 2
-	BotOfflineEventForce            EventType = 3
-	BotOfflineEventDropped          EventType = 4
-	FriendInputStatusChangedEvent   EventType = 5
-	FriendNickChangedEvent          EventType = 6
-	BotJoinGroupEvent               EventType = 7
-	GroupRecallEvent                EventType = 8
-	FriendRecallEvent               EventType = 9
-	NudgeEvent                      EventType = 10
-	GroupNameChangeEvent            EventType = 11
-	MemberCardChangeEvent           EventType = 12
-	MemberHonorChangeEvent          EventType = 13
-	NewFriendRequestEvent           EventType = 14
-	BotInvitedJoinGroupRequestEvent EventType = 15
-	Poke                            EventType = 16
-	Dice                            EventType = 17
+	FriendInputStatusChangedEvent   EventType = 1
+	GroupRecallEvent                EventType = 2
+	FriendRecallEvent               EventType = 3
+	NudgeEvent                      EventType = 4
+	MemberCardChangeEvent           EventType = 5
+	MemberHonorChangeEvent          EventType = 6
+	NewFriendRequestEvent           EventType = 7
+	BotInvitedJoinGroupRequestEvent EventType = 8
 )
 
 type WsRespData struct {

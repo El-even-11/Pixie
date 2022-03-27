@@ -33,6 +33,12 @@ func decodeMessage(data []byte) (MessageChain, error) {
 	return messageChain, nil
 }
 
-func decodeEvent(data []byte) (any, error) {
-	return nil, nil
+func decodeEvent(data []byte) (Event, error) {
+	var event Event
+	if err := json.Unmarshal(data, &event); err != nil {
+		log.Printf("json: unmarshaling failed: %s", err)
+		return event, err
+	}
+
+	return event, nil
 }

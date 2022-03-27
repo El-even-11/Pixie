@@ -1,5 +1,9 @@
 package bot
 
+import (
+	"pixie/internal/pkg/json"
+)
+
 func Serve() {
 	for {
 		select {
@@ -26,13 +30,15 @@ func Serve() {
 }
 
 func serveMessage(data []byte) Message {
-	return Message{}
+	json.Decode(data, true)
+	return Message{
+		Empty: true,
+	}
 }
 
 func serveEvent(data []byte) Event {
-	return Event{}
-}
-
-func decodeEvent() {
-
+	json.Decode(data, false)
+	return Event{
+		Empty: true,
+	}
 }
