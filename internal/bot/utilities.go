@@ -13,11 +13,13 @@ var MessageSendCh chan Message
 var EventSendCh chan Event
 
 type Message struct {
-	Data []byte
-	Done chan struct{}
+	Empty bool
+	Data  []byte
+	Done  chan struct{}
 }
 
 type Event struct {
-	Data []byte
-	Done chan struct{}
+	Empty bool
+	Data  []byte
+	Done  chan struct{}
 }
