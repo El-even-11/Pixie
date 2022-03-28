@@ -10,14 +10,17 @@ func Serve() {
 	for {
 		select {
 		case m := <-MessageRecvCh:
-			respMessage := serveMessage(m)
-			if respMessage.Empty {
-				continue
+			respMessages := serveMessage(m)
+			for _, message := range respMessages {
+				if message.Empty {
+					continue
+				}
+				go func() {
+					MessageSendCh <- message
+				}()
+				<-message.Done
 			}
-			go func() {
-				MessageSendCh <- respMessage
-			}()
-			<-respMessage.Done
+
 		case e := <-EventRecvCh:
 			respEvent := serveEvent(e)
 			if respEvent.Empty {
@@ -31,14 +34,12 @@ func Serve() {
 	}
 }
 
-func serveMessage(data []byte) Message {
+func serveMessage(data []byte) []Message {
 	messageChainItf, err := json.Decode(data, true)
 
 	if err != nil {
 		log.Printf("%s", err)
-		return Message{
-			Empty: true,
-		}
+		return nil
 	}
 	debug.DPrintf("decode: %v", messageChainItf)
 
@@ -47,39 +48,32 @@ func serveMessage(data []byte) Message {
 		panic("message chain type error!")
 	}
 
-	var messageHandler func(json.MessageChain) (json.WsReqData, error)
-
-	switch messageChain.Type {
-	case "FriendMessage":
-		messageHandler = friendMessageHandler
-	case "GroupMessage":
-		messageHandler = groupMessageHandler
-	default:
-		log.Printf("unknown message chain type")
-		return Message{
-			Empty: true,
-		}
-	}
-
-	wsReq, err := messageHandler(messageChain)
+	wsReqs, err := messageHandler(messageChain)
 	if err != nil {
-		return Message{
-			Empty: true,
-		}
+		return nil
 	}
 
-	wsReqBytes, err := json.Encode(wsReq)
-	if err != nil {
-		return Message{
-			Empty: true,
+	messages := make([]Message, len(wsReqs))
+	for _, wsReq := range wsReqs {
+		bytes, err := json.Encode(wsReq)
+		if err != nil {
+			messages = append(messages,
+				Message{
+					Empty: true,
+				},
+			)
+			continue
 		}
+		messages = append(messages,
+			Message{
+				Empty: false,
+				Data:  bytes,
+				Done:  make(chan struct{}),
+			},
+		)
 	}
 
-	return Message{
-		Empty: false,
-		Done:  make(chan struct{}),
-		Data:  wsReqBytes,
-	}
+	return messages
 }
 
 func serveEvent(data []byte) Event {
