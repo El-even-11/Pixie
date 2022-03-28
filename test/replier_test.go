@@ -1,7 +1,6 @@
 package test_test
 
 import (
-	"log"
 	"pixie/internal/bot"
 	"testing"
 	"time"
@@ -70,21 +69,21 @@ var data = [5]string{
 			`,
 }
 
-func TestStartReply(t *testing.T) {
-	log.Println("Starting reply test")
+// func TestStartReply(t *testing.T) {
+// 	log.Println("Starting reply test")
 
-	bot.Init()
-	bot.Writer()
+// 	bot.Init()
+// 	bot.Writer()
 
-	for i := 0; i < 5; i++ {
-		m := bot.Message{
-			Data: []byte(data[i]),
-			Done: make(chan struct{}),
-		}
-		bot.MessageSendCh <- m
-		<-m.Done
-	}
-}
+// 	for i := 0; i < 5; i++ {
+// 		m := bot.Message{
+// 			Data: []byte(data[i]),
+// 			Done: make(chan struct{}),
+// 		}
+// 		bot.MessageSendCh <- m
+// 		<-m.Done
+// 	}
+// }
 
 func TestListenAndReply(t *testing.T) {
 	bot.Init()
