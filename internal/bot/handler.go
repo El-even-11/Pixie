@@ -5,9 +5,9 @@ import (
 	"pixie/internal/pkg/json"
 )
 
-func messageHandler(messageChain json.MessageChain) ([]json.WsReqData, error) {
+func messageHandler(messageChain json.MessageChain) ([]json.WsReq, error) {
 
-	wsReqDataArr := make([]json.WsReqData, 0)
+	wsReqArr := make([]json.WsReq, 0)
 	var commandType string
 
 	switch messageChain.Type {
@@ -26,8 +26,8 @@ func messageHandler(messageChain json.MessageChain) ([]json.WsReqData, error) {
 		case "face":
 		case "plain":
 			outMessageChain := plainHandler(message, messageChain)
-			wsReqData := json.WsReqData{
-				SyncId: 1,
+			wsReq := json.WsReq{
+				SyncId: "1",
 			}
 
 		case "image":

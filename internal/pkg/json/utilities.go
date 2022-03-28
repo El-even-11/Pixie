@@ -1,16 +1,12 @@
 package json
 
-type WsRespData struct {
+type WsResp struct {
 	SyncId string `json:"syncId"`
 	Data   any    `json:"data"`
 }
 
-type WsReqData struct {
+type WsReq struct {
 	SyncId  string `json:"syncId"`
 	Command string `json:"command"`
 	Content any    `json:"content"`
-}
-
-type TypeProbe struct {
-	Type string `json:"type"`
 }

@@ -6,7 +6,7 @@ import (
 	"pixie/internal/pkg/net"
 )
 
-func StartListen() {
+func Listener() {
 	go func() {
 		for {
 			_, message, err := net.MessageConn.ReadMessage()
@@ -15,7 +15,7 @@ func StartListen() {
 				log.Printf("read: %s", err)
 			}
 			go func() {
-				MessageRecvCh <- message
+				MessageBytesRecvCh <- message
 			}()
 		}
 	}()
@@ -28,7 +28,7 @@ func StartListen() {
 				log.Printf("read: %s", err)
 			}
 			go func() {
-				EventRecvCh <- event
+				EventBytesRecvCh <- event
 			}()
 		}
 	}()

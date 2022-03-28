@@ -6,12 +6,12 @@ import (
 )
 
 func Decode(data []byte, isMessage bool) (any, error) {
-	var wsRespData WsRespData
-	if err := json.Unmarshal(data, &wsRespData); err != nil {
+	var wsResp WsResp
+	if err := json.Unmarshal(data, &wsResp); err != nil {
 		log.Printf("json: unmarshaling failed: %s", err)
 		return nil, err
 	}
-	content, err := json.Marshal(wsRespData.Data)
+	content, err := json.Marshal(wsResp.Data)
 	if err != nil {
 		log.Printf("json: marshaling failed: %s", err)
 		return nil, err

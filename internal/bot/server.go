@@ -22,7 +22,7 @@ func serveMessage(data []byte) {
 
 	if err != nil {
 		log.Printf("%s", err)
-		return nil
+		return
 	}
 	debug.DPrintf("decode: %v", messageChainItf)
 
@@ -31,28 +31,7 @@ func serveMessage(data []byte) {
 		panic("message chain type error!")
 	}
 
-	wsReqs, err := messageHandler(messageChain)
-	if err != nil {
-		return nil
-	}
-
-	messages := make([]Message, len(wsReqs))
-	for i, wsReq := range wsReqs {
-		bytes, err := json.Encode(wsReq)
-		if err != nil {
-			messages[i] = Message{
-				Empty: true,
-			}
-			continue
-		}
-		messages[i] = Message{
-			Empty: false,
-			Data:  bytes,
-			Done:  make(chan struct{}),
-		}
-	}
-
-	return messages
+	messageHandler(messageChain)
 }
 
 func serveEvent(data []byte) {
