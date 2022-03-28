@@ -56,3 +56,7 @@ func plainHandler(inMessage json.Message, inMessageChain json.MessageChain) json
 		panic("unknown plain handler mode")
 	}
 }
+
+func eventHandler(event json.Event) {
+
+}
