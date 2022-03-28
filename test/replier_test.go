@@ -74,7 +74,7 @@ func TestStartReply(t *testing.T) {
 	log.Println("Starting reply test")
 
 	bot.Init()
-	bot.StartReply()
+	bot.Writer()
 
 	for i := 0; i < 5; i++ {
 		m := bot.Message{
@@ -88,17 +88,8 @@ func TestStartReply(t *testing.T) {
 
 func TestListenAndReply(t *testing.T) {
 	bot.Init()
-	bot.StartListen()
-	bot.StartReply()
-
-	for i := 0; i < 5; i++ {
-		m := bot.Message{
-			Data: []byte(data[i]),
-			Done: make(chan struct{}),
-		}
-		bot.MessageSendCh <- m
-		<-m.Done
-	}
+	bot.Listener()
+	bot.Writer()
 
 	time.Sleep(time.Second * 1)
 }

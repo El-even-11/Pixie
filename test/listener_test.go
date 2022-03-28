@@ -7,7 +7,7 @@ import (
 
 func TestStartListen(t *testing.T) {
 	bot.Init()
-	bot.StartListen()
+	bot.Listener()
 	for i := 0; i < 5; i++ {
 		<-bot.MessageRecvCh
 	}
