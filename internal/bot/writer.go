@@ -23,12 +23,16 @@ func Writer() {
 				}
 				// time.Sleep(INTERVAL)
 			case <-SleepCh:
+			FORLOOP:
 				for {
 					select {
 					case <-BytesSendCh:
 						// while sleeping, ignore the sending messages
+					case <-SleepCh:
+						// ignore multi sleep commands
 					case <-WakeCh:
-						break
+						debug.DPrintf("wake!")
+						break FORLOOP
 					}
 				}
 			}

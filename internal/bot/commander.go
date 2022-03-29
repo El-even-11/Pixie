@@ -1,6 +1,7 @@
 package bot
 
 import (
+	"pixie/internal/pkg/debug"
 	"pixie/internal/pkg/json"
 	"strings"
 )
@@ -21,5 +22,6 @@ func sleep() {
 }
 
 func wake() {
+	debug.DPrintf("wake here")
 	WakeCh <- struct{}{}
 }
