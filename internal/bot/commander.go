@@ -11,14 +11,15 @@ func commandHandler(inMessage json.Message, inMessageChain json.MessageChain) {
 	case "/sleep":
 		sleep()
 	case "/wake":
-		
+		wake()
+	default:
 	}
 }
 
 func sleep() {
-	
+	SleepCh <- struct{}{}
 }
 
 func wake() {
-
+	WakeCh <- struct{}{}
 }
