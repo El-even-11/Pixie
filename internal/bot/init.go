@@ -24,6 +24,9 @@ func parasInit() {
 	EventRecvCh = make(chan json.Event, CH_MAX_BUFSIZE)
 	BytesSendCh = make(chan []byte, CH_MAX_BUFSIZE)
 	SendCh = make(chan json.WsReq, CH_MAX_BUFSIZE)
+
+	SleepCh = make(chan struct{})
+	WakeCh = make(chan struct{})
 }
 
 func socketInit() {

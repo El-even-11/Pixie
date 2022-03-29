@@ -10,7 +10,7 @@ func Listener() {
 	go func() {
 		for {
 			_, message, err := net.MessageConn.ReadMessage()
-			debug.DPrintf("recv: %s", message)
+			debug.DPrintf("recv m: %s", message)
 			if err != nil {
 				log.Printf("read: %s", err)
 			}
@@ -23,7 +23,7 @@ func Listener() {
 	go func() {
 		for {
 			_, event, err := net.EventConn.ReadMessage()
-			debug.DPrintf("recv: %s", event)
+			debug.DPrintf("recv e: %s", event)
 			if err != nil {
 				log.Printf("read: %s", err)
 			}
