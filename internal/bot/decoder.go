@@ -1,9 +1,9 @@
 package bot
 
 import (
-	"log"
 	"pixie/internal/pkg/debug"
 	"pixie/internal/pkg/json"
+	"pixie/internal/pkg/log"
 )
 
 func Decoder() {
@@ -13,8 +13,8 @@ func Decoder() {
 			case m := <-MessageBytesRecvCh:
 				messageChainItf, err := json.Decode(m, true)
 				if err != nil {
-					log.Printf("%s", err)
-					return
+					log.Log("%s", err)
+					break
 				}
 				debug.DPrintf("decode: %v", messageChainItf)
 
@@ -29,8 +29,8 @@ func Decoder() {
 			case e := <-EventBytesRecvCh:
 				eventItf, err := json.Decode(e, false)
 				if err != nil {
-					log.Printf("%s", err)
-					return
+					log.Log("%s", err)
+					break
 				}
 
 				debug.DPrintf("decode: %v", eventItf)
