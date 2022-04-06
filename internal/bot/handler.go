@@ -22,7 +22,6 @@ func messageHandler(messageChain json.MessageChain) {
 		default:
 		}
 	}
-	return
 }
 
 type plainHandlerMode int

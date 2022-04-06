@@ -1,8 +1,7 @@
 package bot
 
 import (
-	"log"
-	"pixie/internal/pkg/debug"
+	"pixie/internal/pkg/log"
 	"pixie/internal/pkg/net"
 
 	"github.com/gorilla/websocket"
@@ -16,10 +15,10 @@ func Writer() {
 		for {
 			select {
 			case data := <-BytesSendCh:
-				debug.DPrintf("Write: %s", data)
+				log.Log("Write: %s", data)
 				err := net.MessageConn.WriteMessage(websocket.TextMessage, data)
 				if err != nil {
-					log.Printf("write fail: %s", err)
+					log.Log("write fail: %s", err)
 				}
 				// time.Sleep(INTERVAL)
 			case <-SleepCh:
@@ -31,10 +30,12 @@ func Writer() {
 					case <-SleepCh:
 						// ignore multi sleep commands
 					case <-WakeCh:
-						debug.DPrintf("wake!")
+						log.Log("wake!")
 						break FORLOOP
 					}
 				}
+			case <-WakeCh:
+				// while awake, ignore wake commands
 			}
 		}
 	}()

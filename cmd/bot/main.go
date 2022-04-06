@@ -6,6 +6,7 @@ import (
 
 func main() {
 	bot.Init()
+	bot.Logger()
 	bot.Listener()
 	bot.Writer()
 	bot.Encoder()

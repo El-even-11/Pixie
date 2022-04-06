@@ -27,6 +27,8 @@ func parasInit() {
 
 	SleepCh = make(chan struct{})
 	WakeCh = make(chan struct{})
+
+	LogCh = make(chan string, CH_MAX_BUFSIZE)
 }
 
 func socketInit() {

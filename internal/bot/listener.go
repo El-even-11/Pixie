@@ -1,8 +1,7 @@
 package bot
 
 import (
-	"log"
-	"pixie/internal/pkg/debug"
+	"pixie/internal/pkg/log"
 	"pixie/internal/pkg/net"
 )
 
@@ -10,9 +9,10 @@ func Listener() {
 	go func() {
 		for {
 			_, message, err := net.MessageConn.ReadMessage()
-			debug.DPrintf("recv m: %s", message)
+			log.Log("recv m: %s", message)
 			if err != nil {
-				log.Printf("read: %s", err)
+				log.Log("read: %s", err)
+				continue
 			}
 			go func() {
 				MessageBytesRecvCh <- message
@@ -23,9 +23,10 @@ func Listener() {
 	go func() {
 		for {
 			_, event, err := net.EventConn.ReadMessage()
-			debug.DPrintf("recv e: %s", event)
+			log.Log("recv e: %s", event)
 			if err != nil {
-				log.Printf("read: %s", err)
+				log.Log("read: %s", err)
+				continue
 			}
 			go func() {
 				EventBytesRecvCh <- event
