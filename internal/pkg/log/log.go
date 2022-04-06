@@ -14,7 +14,7 @@ func Log(format string, a ...interface{}) {
 	file, err := os.OpenFile("../logs/"+ymd, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	defer file.Close()
 	if err != nil {
-		log.Printf("open file failed")
+		log.Printf("open file failed, %s", err)
 		return
 	}
 
