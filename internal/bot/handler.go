@@ -1,7 +1,6 @@
 package bot
 
 import (
-	"pixie/internal/pkg/debug"
 	"pixie/internal/pkg/json"
 	"reflect"
 	"strings"
@@ -10,7 +9,6 @@ import (
 func messageHandler(messageChain json.MessageChain) {
 	go senderHandler(messageChain.Sender)
 
-	debug.DPrintf("%d", len(messageChain.Messages))
 	for _, message := range messageChain.Messages {
 		switch message.Type {
 		case "Source":

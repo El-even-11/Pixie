@@ -1,7 +1,6 @@
 package bot
 
 import (
-	"pixie/internal/pkg/debug"
 	"pixie/internal/pkg/json"
 	"pixie/internal/pkg/log"
 )
@@ -16,7 +15,6 @@ func Decoder() {
 					log.Log("%s", err)
 					break
 				}
-				debug.DPrintf("decode: %v", messageChainItf)
 
 				messageChain, ok := messageChainItf.(json.MessageChain)
 				if !ok {
@@ -32,8 +30,6 @@ func Decoder() {
 					log.Log("%s", err)
 					break
 				}
-
-				debug.DPrintf("decode: %v", eventItf)
 
 				event, ok := eventItf.(json.Event)
 				if !ok {
