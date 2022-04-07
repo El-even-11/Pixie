@@ -6,10 +6,10 @@ import (
 	"strings"
 )
 
-func messageHandler(messageChain json.MessageChain) {
+func messageHandler(messageChain json.Message) {
 	go senderHandler(messageChain.Sender)
 
-	for _, message := range messageChain.Messages {
+	for _, message := range messageChain.MessageChain {
 		switch message.Type {
 		case "Source":
 		case "At":
@@ -37,7 +37,7 @@ func senderHandler(sender json.Sender) {
 	}
 }
 
-func textHandler(inMessage json.Message, inMessageChain json.MessageChain) {
+func textHandler(inMessage json.MessageItem, inMessageChain json.Message) {
 	if strings.HasPrefix(inMessage.Text, "/") {
 		go commandHandler(inMessage, inMessageChain)
 		return
@@ -47,8 +47,8 @@ func textHandler(inMessage json.Message, inMessageChain json.MessageChain) {
 		SyncId: "1",
 	}
 
-	outMessageChain := json.MessageChain{
-		Messages: make([]json.Message, 0),
+	outMessageChain := json.Message{
+		MessageChain: make([]json.MessageItem, 0),
 	}
 
 	switch inMessageChain.Type {
@@ -64,7 +64,7 @@ func textHandler(inMessage json.Message, inMessageChain json.MessageChain) {
 
 	switch mode {
 	case echo:
-		outMessageChain.Messages = append(outMessageChain.Messages, json.BuildMessage([]string{"Plain"}, []string{inMessage.Text})...)
+		outMessageChain.MessageChain = append(outMessageChain.MessageChain, json.BuildMessage([]string{"Plain"}, []string{inMessage.Text})...)
 	case trigger:
 	default:
 		panic("unknown plain handler mode")

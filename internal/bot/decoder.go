@@ -10,18 +10,18 @@ func Decoder() {
 		for {
 			select {
 			case m := <-MessageBytesRecvCh:
-				messageChainItf, err := json.Decode(m, true)
+				messageItf, err := json.Decode(m, true)
 				if err != nil {
 					log.Log("%s", err)
 					break
 				}
 
-				messageChain, ok := messageChainItf.(json.MessageChain)
+				message, ok := messageItf.(json.Message)
 				if !ok {
-					panic("message chain type error!")
+					panic("message type error!")
 				}
 				go func() {
-					MessageRecvCh <- messageChain
+					MessageRecvCh <- message
 				}()
 
 			case e := <-EventBytesRecvCh:
@@ -33,7 +33,7 @@ func Decoder() {
 
 				event, ok := eventItf.(json.Event)
 				if !ok {
-					panic("message chain type error!")
+					panic("event type error!")
 				}
 
 				go func() {

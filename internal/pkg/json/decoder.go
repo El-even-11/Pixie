@@ -23,8 +23,8 @@ func Decode(data []byte, isMessage bool) (any, error) {
 	return decodeEvent(content)
 }
 
-func decodeMessage(data []byte) (MessageChain, error) {
-	var messageChain MessageChain
+func decodeMessage(data []byte) (Message, error) {
+	var messageChain Message
 	if err := json.Unmarshal(data, &messageChain); err != nil {
 		log.Printf("json: unmarshaling failed: %s", err)
 		return messageChain, err

@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func commandHandler(inMessage json.Message, inMessageChain json.MessageChain) {
+func commandHandler(inMessage json.MessageItem, inMessageChain json.Message) {
 	paras := strings.Split(inMessage.Text, " ")
 	switch paras[0] {
 	case "/sleep":

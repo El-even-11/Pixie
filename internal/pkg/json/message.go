@@ -1,8 +1,8 @@
 package json
 
-type MessageChain struct {
+type Message struct {
 	// common
-	Messages []Message `json:"messageChain"`
+	MessageChain []MessageItem `json:"messageChain"`
 	
 	// receive
 	Type   string `json:"type,omitempty"`
@@ -30,7 +30,7 @@ type GroupInfo struct {
 	Name string `json:"name"`
 }
 
-type Message struct {
+type MessageItem struct {
 	// common
 	Type string `json:"type"`
 

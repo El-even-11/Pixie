@@ -15,7 +15,7 @@ var EventBytesRecvCh chan []byte
 
 var BytesSendCh chan []byte
 
-var MessageRecvCh chan json.MessageChain
+var MessageRecvCh chan json.Message
 var EventRecvCh chan json.Event
 
 var SendCh chan json.WsReq
