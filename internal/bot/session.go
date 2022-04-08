@@ -5,29 +5,33 @@ import (
 	"time"
 )
 
-type sessType int
+type sessionType int
 
 const (
-	Friend sessType = 0
-	Group  sessType = 1
+	Friend sessionType = 0
+	Group  sessionType = 1
 )
 
-type sessMode int
+type sessionMode int
 
 const (
-	Sleep   sessMode = 0
-	Echo    sessMode = 1
-	Trigger sessMode = 2
+	Sleep   sessionMode = 0
+	Echo    sessionMode = 1
+	Trigger sessionMode = 2
 )
 
 type session struct {
-	Type         sessType
-	Mode         sessMode
-	Number       int64
-	ExpiredTimer *time.Timer
-	MessageCh    chan json.Message
+	sesstype     sessionType
+	mode         sessionMode
+	number       int64
+	expiredTimer *time.Timer
+	messageCh    chan json.Message
 }
 
-func (sess *session) serve() {
+const SESSION_TIME_OUT = time.Second * 120
 
+func (sess *session) serve() {
+	for {
+		
+	}
 }
