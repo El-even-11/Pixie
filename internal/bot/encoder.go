@@ -9,12 +9,12 @@ func Encoder() {
 	go func() {
 		for {
 			wsReq := <-SendCh
-			data, err := json.Encode(wsReq)
-			if err != nil {
-				log.Log("encoder: encode fail %s", err)
-				continue
-			}
 			go func() {
+				data, err := json.Encode(wsReq)
+				if err != nil {
+					log.Log("encoder: encode fail %s", err)
+					return
+				}
 				BytesSendCh <- data
 			}()
 		}
