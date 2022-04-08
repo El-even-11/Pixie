@@ -18,8 +18,6 @@ func Init() {
 }
 
 func parasInit() {
-	MessageBytesRecvCh = make(chan []byte, CH_MAX_BUFSIZE)
-	EventBytesRecvCh = make(chan []byte, CH_MAX_BUFSIZE)
 	MessageRecvCh = make(chan json.Message, CH_MAX_BUFSIZE)
 	EventRecvCh = make(chan json.Event, CH_MAX_BUFSIZE)
 	BytesSendCh = make(chan []byte, CH_MAX_BUFSIZE)

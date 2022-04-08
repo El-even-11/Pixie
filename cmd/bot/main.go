@@ -10,6 +10,5 @@ func main() {
 	bot.Listener()
 	bot.Writer()
 	bot.Encoder()
-	bot.Decoder()
 	bot.Serve()
 }

@@ -10,9 +10,6 @@ const HOST = "localhost:8080"
 
 const CH_MAX_BUFSIZE = 10
 
-var MessageBytesRecvCh chan []byte
-var EventBytesRecvCh chan []byte
-
 var BytesSendCh chan []byte
 
 var MessageRecvCh chan json.Message

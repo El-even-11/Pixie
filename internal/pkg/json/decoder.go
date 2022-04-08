@@ -5,39 +5,43 @@ import (
 	"log"
 )
 
-func Decode(data []byte, isMessage bool) (any, error) {
+func DecodeMessage(data []byte) (Message, error) {
 	var wsResp WsResp
 	if err := json.Unmarshal(data, &wsResp); err != nil {
 		log.Printf("json: unmarshaling failed: %s", err)
-		return nil, err
+		return Message{}, err
 	}
 	content, err := json.Marshal(wsResp.Data)
 	if err != nil {
 		log.Printf("json: marshaling failed: %s", err)
-		return nil, err
+		return Message{}, err
 	}
 
-	if isMessage {
-		return decodeMessage(content)
-	}
-	return decodeEvent(content)
-}
-
-func decodeMessage(data []byte) (Message, error) {
-	var messageChain Message
-	if err := json.Unmarshal(data, &messageChain); err != nil {
+	var message Message
+	if err := json.Unmarshal(content, &message); err != nil {
 		log.Printf("json: unmarshaling failed: %s", err)
-		return messageChain, err
+		return Message{}, err
 	}
-	
-	return messageChain, nil
+
+	return message, nil
 }
 
-func decodeEvent(data []byte) (Event, error) {
+func DecodeEvent(data []byte) (Event, error) {
+	var wsResp WsResp
+	if err := json.Unmarshal(data, &wsResp); err != nil {
+		log.Printf("json: unmarshaling failed: %s", err)
+		return Event{}, err
+	}
+	content, err := json.Marshal(wsResp.Data)
+	if err != nil {
+		log.Printf("json: marshaling failed: %s", err)
+		return Event{}, err
+	}
+
 	var event Event
-	if err := json.Unmarshal(data, &event); err != nil {
+	if err := json.Unmarshal(content, &event); err != nil {
 		log.Printf("json: unmarshaling failed: %s", err)
-		return event, err
+		return Event{}, err
 	}
 
 	return event, nil

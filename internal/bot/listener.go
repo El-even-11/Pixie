@@ -14,9 +14,7 @@ func Listener() {
 				log.Log("read: %s", err)
 				continue
 			}
-			go func() {
-				MessageBytesRecvCh <- message
-			}()
+			go MessageDecoder(message)
 		}
 	}()
 
@@ -28,9 +26,7 @@ func Listener() {
 				log.Log("read: %s", err)
 				continue
 			}
-			go func() {
-				EventBytesRecvCh <- event
-			}()
+			go EventDecoder(event)
 		}
 	}()
 }
