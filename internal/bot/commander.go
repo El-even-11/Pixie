@@ -14,6 +14,10 @@ func (sess *session) commandHandler(command string, iMessage json.Message) {
 		if sess.mode == Sleep {
 			sess.mode = Trigger
 		}
+	case "/echo":
+		sess.mode = Echo
+	case "/trigger":
+		sess.mode = Trigger
 	default:
 	}
 }
