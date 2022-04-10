@@ -54,12 +54,14 @@ func (sess *session) serve() {
 }
 
 func (sess *session) messageHandler(message json.Message) {
-	go sess.senderHandler(message.Sender)
+	if message.Type == "GroupMessage" {
+		go sess.senderHandler(message.Sender)
+	}
 
 	switch sess.mode {
 	case Echo:
+		sess.echo(message)
 	case Trigger:
-
 	}
 }
 
