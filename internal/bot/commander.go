@@ -1,27 +1,19 @@
 package bot
 
 import (
-	"pixie/internal/pkg/debug"
 	"pixie/internal/pkg/json"
 	"strings"
 )
 
-func commandHandler(inMessage json.MessageItem, inMessageChain json.Message) {
-	paras := strings.Split(inMessage.Text, " ")
+func (sess *session) commandHandler(command string, iMessage json.Message) {
+	paras := strings.Split(command, " ")
 	switch paras[0] {
 	case "/sleep":
-		sleep()
+		sess.mode = Sleep
 	case "/wake":
-		wake()
+		if sess.mode == Sleep {
+			sess.mode = Trigger
+		}
 	default:
 	}
-}
-
-func sleep() {
-	SleepCh <- struct{}{}
-}
-
-func wake() {
-	debug.DPrintf("wake here")
-	WakeCh <- struct{}{}
 }

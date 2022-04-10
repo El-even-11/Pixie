@@ -3,7 +3,6 @@ package bot
 import (
 	"pixie/internal/pkg/json"
 	"pixie/internal/pkg/log"
-	"time"
 )
 
 func Serve() {
@@ -17,11 +16,10 @@ func Serve() {
 				num := m.Sender.Group.ID
 				if _, ok := sessMap[num]; !ok {
 					sessMap[num] = &session{
-						sesstype:     Group,
-						mode:         Sleep,
-						number:       num,
-						expiredTimer: time.NewTimer(SESSION_TIME_OUT),
-						messageCh:    make(chan json.Message, 10),
+						sesstype:       Group,
+						mode:           Sleep,
+						number:         num,
+						messageCh:      make(chan json.Message, 10),
 					}
 					go sessMap[num].serve()
 				}
@@ -33,11 +31,10 @@ func Serve() {
 				num := m.Sender.ID
 				if _, ok := sessMap[num]; !ok {
 					sessMap[num] = &session{
-						sesstype:     Friend,
-						mode:         Sleep,
-						number:       num,
-						expiredTimer: time.NewTimer(SESSION_TIME_OUT),
-						messageCh:    make(chan json.Message, 10),
+						sesstype:  Friend,
+						mode:      Sleep,
+						number:    num,
+						messageCh: make(chan json.Message, 10),
 					}
 					go sessMap[num].serve()
 				}

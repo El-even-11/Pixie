@@ -17,7 +17,4 @@ var EventRecvCh chan json.Event
 
 var SendCh chan json.WsReq
 
-var SleepCh chan struct{}
-var WakeCh chan struct{}
-
 var LogCh chan string

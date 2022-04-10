@@ -1,81 +1,72 @@
 package bot
 
-import (
-	"pixie/internal/pkg/json"
-	"reflect"
-	"strings"
-)
+// import (
+// 	"pixie/internal/pkg/json"
+// 	"reflect"
+// 	"strings"
+// )
 
-func messageHandler(messageChain json.Message) {
-	go senderHandler(messageChain.Sender)
+// func messageHandler(message json.Message) {
+// 	go senderHandler(message.Sender)
 
-	for _, message := range messageChain.MessageChain {
-		switch message.Type {
-		case "Source":
-		case "At":
-		case "Face":
-		case "Plain":
-			go textHandler(message, messageChain)
-		case "Image":
-		default:
-		}
-	}
-}
+// 	for _, messageItem := range message.MessageChain {
+// 		switch messageItem.Type {
+// 		case "Source":
+// 		case "At":
+// 		case "Face":
+// 		case "Plain":
+// 			go textHandler(messageItem, message)
+// 		case "Image":
+// 		default:
+// 		}
+// 	}
+// }
 
-type plainHandlerMode int
+// func senderHandler(sender json.Sender) {
+// 	if _, ok := reflect.TypeOf(sender).FieldByName("Group"); !ok {
+// 		return
+// 	}
+// }
 
-const (
-	trigger plainHandlerMode = 1
-	echo    plainHandlerMode = 2
-)
+// func textHandler(inMessage json.MessageItem, inMessageChain json.Message) {
+// 	if strings.HasPrefix(inMessage.Text, "/") {
+// 		go commandHandler(inMessage, inMessageChain)
+// 		return
+// 	}
 
-var mode plainHandlerMode = echo
+// 	wsReq := json.WsReq{
+// 		SyncId: "1",
+// 	}
 
-func senderHandler(sender json.Sender) {
-	if _, ok := reflect.TypeOf(sender).FieldByName("Group"); !ok {
-		return
-	}
-}
+// 	outMessageChain := json.Message{
+// 		MessageChain: make([]json.MessageItem, 0),
+// 	}
 
-func textHandler(inMessage json.MessageItem, inMessageChain json.Message) {
-	if strings.HasPrefix(inMessage.Text, "/") {
-		go commandHandler(inMessage, inMessageChain)
-		return
-	}
+// 	switch inMessageChain.Type {
+// 	case "GroupMessage":
+// 		wsReq.Command = "sendGroupMessage"
+// 		outMessageChain.Target = inMessageChain.Sender.Group.ID
+// 	case "FriendMessage":
+// 		wsReq.Command = "sendFriendMessage"
+// 		outMessageChain.Target = inMessageChain.Sender.ID
+// 	default:
+// 		return
+// 	}
 
-	wsReq := json.WsReq{
-		SyncId: "1",
-	}
+// 	switch mode {
+// 	case echo:
+// 		outMessageChain.MessageChain = append(outMessageChain.MessageChain, json.BuildMessage([]string{"Plain"}, []string{inMessage.Text})...)
+// 	case trigger:
+// 	default:
+// 		panic("unknown plain handler mode")
+// 	}
 
-	outMessageChain := json.Message{
-		MessageChain: make([]json.MessageItem, 0),
-	}
+// 	wsReq.Content = outMessageChain
+// 	go func() {
+// 		SendCh <- wsReq
+// 	}()
+// }
 
-	switch inMessageChain.Type {
-	case "GroupMessage":
-		wsReq.Command = "sendGroupMessage"
-		outMessageChain.Target = inMessageChain.Sender.Group.ID
-	case "FriendMessage":
-		wsReq.Command = "sendFriendMessage"
-		outMessageChain.Target = inMessageChain.Sender.ID
-	default:
-		return
-	}
+// func eventHandler(event json.Event) {
 
-	switch mode {
-	case echo:
-		outMessageChain.MessageChain = append(outMessageChain.MessageChain, json.BuildMessage([]string{"Plain"}, []string{inMessage.Text})...)
-	case trigger:
-	default:
-		panic("unknown plain handler mode")
-	}
-
-	wsReq.Content = outMessageChain
-	go func() {
-		SendCh <- wsReq
-	}()
-}
-
-func eventHandler(event json.Event) {
-
-}
+// }
