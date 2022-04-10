@@ -2,7 +2,9 @@ package bot
 
 import (
 	"pixie/internal/pkg/json"
+	"pixie/internal/pkg/log"
 	"strings"
+	"sync"
 )
 
 type sessionType int
@@ -20,23 +22,30 @@ const (
 	Echo    sessionMode = 2
 )
 
+var sessionModeMap map[int]string = map[int]string{
+	0: "Sleep",
+	1: "Trigger",
+	2: "Echo",
+}
+
 type session struct {
 	sesstype  sessionType
 	mode      sessionMode
 	number    int64
 	messageCh chan json.Message
 	eventCh   chan json.Event
+	modeLock  sync.Mutex
 }
 
 func (sess *session) serve() {
-
 	for {
 		if sess.mode == Sleep {
+			log.Log("sleeping")
 			select {
 			case m := <-sess.messageCh:
 				for _, messageItem := range m.MessageChain {
 					if messageItem.Type == "Plain" && strings.HasPrefix(messageItem.Text, "/") {
-						// waiting for wake command
+						// searching for command
 						sess.commandHandler(messageItem.Text, m)
 					}
 				}
@@ -46,9 +55,9 @@ func (sess *session) serve() {
 		}
 		select {
 		case m := <-sess.messageCh:
-			sess.messageHandler(m)
+			go sess.messageHandler(m)
 		case e := <-sess.eventCh:
-			sess.eventHandler(e)
+			go sess.eventHandler(e)
 		}
 	}
 }
@@ -58,6 +67,15 @@ func (sess *session) messageHandler(message json.Message) {
 		go sess.senderHandler(message.Sender)
 	}
 
+	for _, messageItem := range message.MessageChain {
+		if messageItem.Type == "Plain" && strings.HasPrefix(messageItem.Text, "/") {
+			// searching for command
+			sess.commandHandler(messageItem.Text, message)
+			return
+		}
+	}
+
+	// no command
 	switch sess.mode {
 	case Echo:
 		sess.echo(message)
@@ -92,6 +110,8 @@ func (sess *session) echo(message json.Message) {
 	default:
 		return
 	}
+
+	wsReq.Content = oMessage
 
 	go func() {
 		SendCh <- wsReq
