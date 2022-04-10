@@ -1,6 +1,6 @@
 package json
 
-func BuildMessage(t []string, objects []string) []MessageItem {
+func BuildMessage(t, objects []string) []MessageItem {
 	if len(t) != len(objects) {
 		panic("arrays length mismatch")
 	}
