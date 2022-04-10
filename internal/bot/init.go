@@ -9,6 +9,7 @@ import (
 
 	"pixie/internal/pkg/json"
 	"pixie/internal/pkg/net"
+	"pixie/internal/pkg/redis"
 )
 
 func Init() {
@@ -70,5 +71,5 @@ func socketInit() {
 }
 
 func databaseInit() {
-
+	redis.RedisInit()
 }

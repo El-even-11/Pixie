@@ -14,6 +14,11 @@ const (
 	Group  sessionType = 1
 )
 
+var sessionTypeMap map[int]string = map[int]string{
+	0: "Friend",
+	1: "Group",
+}
+
 type sessionMode int
 
 const (
@@ -92,26 +97,16 @@ func (sess *session) senderHandler(sender json.Sender) {
 }
 
 func (sess *session) echo(message json.Message) {
-	wsReq := json.WsReq{
-		SyncId: "0", // message synchronization
-	}
-
 	oMessage := json.Message{
 		MessageChain: message.MessageChain,
+		Target:       sess.number,
 	}
 
-	switch sess.sesstype {
-	case Friend:
-		wsReq.Command = "sendFriendMessage"
-		oMessage.Target = message.Sender.ID
-	case Group:
-		wsReq.Command = "sendGroupMessage"
-		oMessage.Target = message.Sender.Group.ID
-	default:
-		return
+	wsReq := json.WsReq{
+		SyncId:  "0", // message synchronization
+		Command: "send" + sessionTypeMap[int(sess.sesstype)] + "Message",
+		Content: oMessage,
 	}
-
-	wsReq.Content = oMessage
 
 	go func() {
 		SendCh <- wsReq

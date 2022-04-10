@@ -4,7 +4,7 @@ GOCLEAN=$(GOCMD) clean
 GOTEST=$(GOCMD) test
 GOGET=$(GOCMD) GOGET
 
-BIN_NAME=Pixie-0.2
+BIN_NAME=Pixie-0.3
 
 BIN_PATH=./bin/$(BIN_NAME)
 SOURCE_PATH=./cmd/bot/main.go
