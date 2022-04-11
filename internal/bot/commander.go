@@ -8,7 +8,8 @@ import (
 )
 
 func (sess *session) commandHandler(command string, iMessage json.Message) {
-	paras := strings.Split(command, " ")
+	command = strings.TrimSpace(command)
+	paras := strings.Fields(command)
 	switch paras[0] {
 	case "/sleep":
 		sess.doSleep()
