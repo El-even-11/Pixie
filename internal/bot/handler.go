@@ -72,13 +72,25 @@ func (sess *session) trigger(message json.Message) {
 	}
 
 	for k := range set {
-		v, err := redis.SMembers(k)
+		// -t shows that the key is a text trigger
+		v, err := redis.SMembers(k + "-t")
 		if err == nil && len(v) > 0 {
 			r := rand.Intn(len(v))
 			SendCh <- json.BuildWsReq(
 				sess.number,
 				"send"+sessionTypeMap[int(sess.sesstype)]+"Message",
 				[]string{"Plain"},
+				[]string{v[r]},
+			)
+		}
+		// -i shows that the key is a image trigger
+		v, err = redis.SMembers(k + "-i")
+		if err == nil && len(v) > 0 {
+			r := rand.Intn(len(v))
+			SendCh <- json.BuildWsReq(
+				sess.number,
+				"send"+sessionTypeMap[int(sess.sesstype)]+"Message",
+				[]string{"Image"},
 				[]string{v[r]},
 			)
 		}
