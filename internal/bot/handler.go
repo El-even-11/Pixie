@@ -1,72 +1,86 @@
 package bot
 
-// import (
-// 	"pixie/internal/pkg/json"
-// 	"reflect"
-// 	"strings"
-// )
+import (
+	"math/rand"
+	"pixie/internal/pkg/json"
+	"pixie/internal/pkg/redis"
+	"strings"
+)
 
-// func messageHandler(message json.Message) {
-// 	go senderHandler(message.Sender)
+func (sess *session) messageHandler(message json.Message) {
+	if message.Type == "GroupMessage" {
+		go sess.senderHandler(message.Sender)
+	}
 
-// 	for _, messageItem := range message.MessageChain {
-// 		switch messageItem.Type {
-// 		case "Source":
-// 		case "At":
-// 		case "Face":
-// 		case "Plain":
-// 			go textHandler(messageItem, message)
-// 		case "Image":
-// 		default:
-// 		}
-// 	}
-// }
+	for _, messageItem := range message.MessageChain {
+		if messageItem.Type == "Plain" && strings.HasPrefix(messageItem.Text, "/") {
+			// searching for command
+			sess.commandHandler(messageItem.Text, message)
+			return
+		}
+	}
 
-// func senderHandler(sender json.Sender) {
-// 	if _, ok := reflect.TypeOf(sender).FieldByName("Group"); !ok {
-// 		return
-// 	}
-// }
+	// no command
+	switch sess.mode {
+	case Echo:
+		sess.echo(message)
+	case Trigger:
+		sess.trigger(message)
+	}
+}
 
-// func textHandler(inMessage json.MessageItem, inMessageChain json.Message) {
-// 	if strings.HasPrefix(inMessage.Text, "/") {
-// 		go commandHandler(inMessage, inMessageChain)
-// 		return
-// 	}
+func (sess *session) eventHandler(event json.Event) {
 
-// 	wsReq := json.WsReq{
-// 		SyncId: "1",
-// 	}
+}
 
-// 	outMessageChain := json.Message{
-// 		MessageChain: make([]json.MessageItem, 0),
-// 	}
+func (sess *session) senderHandler(sender json.Sender) {
 
-// 	switch inMessageChain.Type {
-// 	case "GroupMessage":
-// 		wsReq.Command = "sendGroupMessage"
-// 		outMessageChain.Target = inMessageChain.Sender.Group.ID
-// 	case "FriendMessage":
-// 		wsReq.Command = "sendFriendMessage"
-// 		outMessageChain.Target = inMessageChain.Sender.ID
-// 	default:
-// 		return
-// 	}
+}
 
-// 	switch mode {
-// 	case echo:
-// 		outMessageChain.MessageChain = append(outMessageChain.MessageChain, json.BuildMessage([]string{"Plain"}, []string{inMessage.Text})...)
-// 	case trigger:
-// 	default:
-// 		panic("unknown plain handler mode")
-// 	}
+func (sess *session) echo(message json.Message) {
+	SendCh <- json.WsReq{
+		SyncId:  "0",
+		Command: "send" + sessionTypeMap[int(sess.sesstype)] + "Message",
+		Content: json.Message{
+			MessageChain: message.MessageChain,
+			Target:       sess.number,
+		},
+	}
+}
 
-// 	wsReq.Content = outMessageChain
-// 	go func() {
-// 		SendCh <- wsReq
-// 	}()
-// }
+const MAX_SPLIT_LENGTH = 10
 
-// func eventHandler(event json.Event) {
+func (sess *session) trigger(message json.Message) {
 
-// }
+	var text string
+	for _, messageItem := range message.MessageChain {
+		if messageItem.Type == "Plain" {
+			text = messageItem.Text
+			break
+		}
+	}
+
+	runetext := []rune(text)
+	set := make(map[string]struct{})
+
+	set[text] = struct{}{}
+
+	for i := 0; i < len(runetext); i++ {
+		for l := 2; l <= MAX_SPLIT_LENGTH && i+l <= len(runetext); l++ {
+			set[string(runetext[i:i+l])] = struct{}{}
+		}
+	}
+
+	for k := range set {
+		v, err := redis.SMembers(k)
+		if err == nil && len(v) > 0 {
+			r := rand.Intn(len(v))
+			SendCh <- json.BuildWsReq(
+				sess.number,
+				"send"+sessionTypeMap[int(sess.sesstype)]+"Message",
+				[]string{"Plain"},
+				[]string{v[r]},
+			)
+		}
+	}
+}

@@ -8,6 +8,8 @@ import (
 var ctx = context.Background()
 var redisDB *redis.Client
 
+const Nil = redis.Nil
+
 func RedisInit() {
 	redisDB = redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",

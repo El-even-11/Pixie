@@ -2,8 +2,10 @@ package bot
 
 import (
 	"log"
+	"math/rand"
 	"net/http"
 	"net/url"
+	"time"
 
 	"github.com/gorilla/websocket"
 
@@ -13,6 +15,7 @@ import (
 )
 
 func Init() {
+	rand.Seed(time.Now().Unix())
 	parasInit()
 	socketInit()
 	databaseInit()
