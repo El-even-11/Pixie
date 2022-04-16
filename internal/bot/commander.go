@@ -23,6 +23,8 @@ func (sess *session) commandHandler(command string, iMessage json.Message) {
 		sess.doAddTextTrigger(paras[1:])
 	case "/addimg":
 		sess.doAddImageTrigger(paras[1:], iMessage)
+	case "/remake":
+
 	default:
 	}
 }
@@ -69,6 +71,10 @@ func (sess *session) doAddTextTrigger(paras []string) {
 		return
 	}
 
+	if s := strings.Join(paras[1:], " "); strings.HasPrefix(s, "\"") && strings.HasSuffix(s, "\"") && s != "\"\"" {
+		paras = paras[:2]
+		paras[1] = strings.Trim(s, "\"")
+	}
 	// -t shows that the key is a text trigger
 	err := redis.SAdd(paras[0]+"-t", paras[1:])
 	if err != nil {
@@ -143,4 +149,8 @@ func (sess *session) doAddImageTrigger(paras []string, message json.Message) {
 		[]string{"add image trigger success"},
 	)
 	SendCh <- wsReq
+}
+
+func (sess *session) doRemake(){
+	
 }
